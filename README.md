@@ -1,2 +1,5 @@
 # PMsa
-Particulate matter small area: we use a bunch of Pi 0W and PM sensors do gether data of PM distribution in a small area
+Particulate matter small area: a client-master measurement system to gather data via W-LAN
+
+Preface:
+The master system service a wireless network on which the client systems connect to. Data gathered will be stored by a ssh connection to 'master.dcaiti'. For time synchronization a NTP service runs on this master, which polls its timedata from a gpsd-service. 
