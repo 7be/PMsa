@@ -12,6 +12,7 @@ cp service_files/hostapd /etc/defaults/hostapd
 cp service_files/hostapd.conf /etc/hostapd.conf
 cp service_files/gpsd /etc/defaults/gpsd
 cp service_files/ntp.conf /etc/ntp.conf
+cp service_files/config.txt /boot/config.txt
 
 systemctl enable dnsmasq
 systemctl enable hostapd
