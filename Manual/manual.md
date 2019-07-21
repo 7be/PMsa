@@ -24,3 +24,6 @@ In this section we describe how to set up the measuring units for a measurement.
 * Pay attention to not put them in airtight compartments as this might result in wrong measurement. For accurate values it is important to place the sensors upright.
 * Connect all PIs to their power bank. The measurement starts automatically.
 
+## Gathering Data
+Connect to the Network 'DCAITI_Feldversuch' with the password 'dcaiti_wlan_passwort'. You can now connect to the master system via sftp://pi@master.dcaiti and find the measurements with a timestamp and its MAC-Adress in the home directory. The files have the form '$MAC_YYYYMMDDHHSS.csv'.
+
