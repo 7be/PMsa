@@ -29,6 +29,6 @@ Connect to the Network 'DCAITI_Feldversuch' with the password 'dcaiti_wlan_passw
 
 # Software Installation
 ## Master
-Generate a rsa key-pair and push the public key via ssh-copy-id to your designated master system. The private key will be used by the measurement clients. 
-Run the install_master.sh script via 'ssh pi@IP_OF_MASTER_SYSTEM 'sudo bash -s' < install_master.sh'. 
+Generate a rsa key-pair and push the public key via `ssh-copy-id` to your designated master system. The private key will be used by the measurement clients. 
+Run the `install_master.sh` script via `ssh pi@IP_OF_MASTER_SYSTEM 'sudo bash -s' < install_master.sh`. 
 
