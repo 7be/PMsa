@@ -87,6 +87,8 @@ systemctl stop systemd-timesyncd
 systemctl disable systemd-timesyncd
 ```
 
+You can check ntp and gps via `cgps` or `ntpq -pn`.
+
 ### SSH Server
 Generate a rsa key-pair and push the public key via `ssh-copy-id` to your designated master system. The private key will be used by the measurement clients. 
 Run the `install_master.sh` script via `ssh pi@IP_OF_MASTER_SYSTEM 'sudo bash -s' < install_master.sh`. 
