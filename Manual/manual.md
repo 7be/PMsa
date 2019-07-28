@@ -89,7 +89,7 @@ systemctl disable systemd-timesyncd
 
 You can check ntp and gps via `cgps` or `ntpq -pn`.
 
-#### SH Server
+#### SSH Server
 Measurement clients will push there data via ssh to the master system. Authentication will be achieved by publickey authentication. Edit `/etc/ssh/sshd_config` to contain following lines:
 ```
 PubkeyAuthentication yes
