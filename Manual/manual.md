@@ -49,7 +49,14 @@ systemctl unmask hostapd
 systemctl restart hostapd
 systemctl start hostapd
 ```
-
+#### dnsmasq
+This will distribute ip configuration and give name resolution to your network.
+Backup old `dnsmasq.conf` and copy the one from the repo to  `/etc/dnsmasq.conf`
+```
+systemctl restart hostapd
+systemctl start hostapd
+```
+Add `10.0.0.1	master.dcaiti` to `/etc/host`
 
 ### SSH Server
 Generate a rsa key-pair and push the public key via `ssh-copy-id` to your designated master system. The private key will be used by the measurement clients. 
