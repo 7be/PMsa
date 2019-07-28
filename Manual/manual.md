@@ -38,9 +38,14 @@ static ip_address=10.0.0.1/16 # 10.0.0.0 - 10.0.255.255
 ```
 #### hostapd
 Restart the dhcp client daemon via `sudo systemctl restart dhcpcd`. Install the necessary software packages for an Access Point:
-`sudo apt install dnsmasq hostapd`. Backup the hostapd config file via `cp /etc/hostapd/hostapd.conf /etc/hostapd/hostapd.conf.old` and replace it by the one in this Repo (`service_files/hostapd.conf`). Keep in mind to change the password and make it only readable by root `chmod 600 /etc/hostapd/hostapd.conf`
+`sudo apt install dnsmasq hostapd`. Backup the hostapd config file via `cp /etc/hostapd/hostapd.conf /etc/hostapd/hostapd.conf.old` and replace it by the one in this Repo (`service_files/hostapd.conf`). Keep in mind to change the password and make it only readable by root `chmod 600 /etc/hostapd/hostapd.conf`. Edit `/etc/defaults/hostapd` to contain following lines:
+```
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+```
+RUN_DAEMON=yes
 Start and enable the service:
 ```
+systemctl unmask hostapd
 systemctl restart hostapd
 systemctl start hostapd
 ```
