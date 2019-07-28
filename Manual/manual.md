@@ -58,6 +58,35 @@ systemctl start hostapd
 ```
 Add `10.0.0.1	master.dcaiti` to `/etc/host`
 
+#### NTP / GPS
+Install the packages `gpsd` and `ntp`. Add following lines to your `/etc/ntp.conf`:
+```
+server 127.127.28.0 prefer # GPS via SHM 
+# GPS data via SHM driver
+# flag1: Skip the difference limit check if set, see: http://doc.ntp.org/4.2.8/drivers/driver28.html
+fudge 127.127.28.0 flag1 1 refid GPS
+
+# announce this instance to our measurement network 
+restrict 10.0.0.0 mask 255.255.0.0 nomodify notrap
+```
+
+Edit `/etc/defaults/gpsd` to contain following line:
+```
+DEVICES="/dev/ttyUSB0"
+```
+The gps daemon will probe the GPS module via the USB/UART-Bridge. Finally start and enable those services:
+```
+systemctl start ntp
+systemctl enable ntp
+systemctl start gpsd
+systemctl enable gspd
+```
+Disable the timesync daemon:
+```
+systemctl stop systemd-timesyncd
+systemctl disable systemd-timesyncd
+```
+
 ### SSH Server
 Generate a rsa key-pair and push the public key via `ssh-copy-id` to your designated master system. The private key will be used by the measurement clients. 
 Run the `install_master.sh` script via `ssh pi@IP_OF_MASTER_SYSTEM 'sudo bash -s' < install_master.sh`. 
