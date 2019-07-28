@@ -36,13 +36,15 @@ Collection of data and synchronization of time will be achieved via W-Lan. Conne
 interface wlan0
 static ip_address=10.0.0.1/16 # 10.0.0.0 - 10.0.255.255
 ```
+#### hostapd
 Restart the dhcp client daemon via `sudo systemctl restart dhcpcd`. Install the necessary software packages for an Access Point:
-`sudo apt install dnsmasq hostapd`. Backup the hostapd config file via `cp /etc/hostapd.conf /etc.hostapd.conf.old` and replace it by the one in this Repo (`service_files/hostapd.conf`). Keep in mind to change the password! 
+`sudo apt install dnsmasq hostapd`. Backup the hostapd config file via `cp /etc/hostapd/hostapd.conf /etc/hostapd/hostapd.conf.old` and replace it by the one in this Repo (`service_files/hostapd.conf`). Keep in mind to change the password and make it only readable by root `chmod 600 /etc/hostapd/hostapd.conf`
 Start and enable the service:
 ```
-systemctl restart dnsmasq
-systemctl start dnsmasq
+systemctl restart hostapd
+systemctl start hostapd
 ```
+
 
 ### SSH Server
 Generate a rsa key-pair and push the public key via `ssh-copy-id` to your designated master system. The private key will be used by the measurement clients. 
