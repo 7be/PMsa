@@ -119,7 +119,7 @@ network={
 }
 ```
 ### Gather scripts
-Copy `RPi-script/aqi.py` to `/usr/local/bin/dcaiti`. Make it executable with `chmod +x /usr/local/bin/dcaiti/aqi.py`
+Copy `RPi-script/aqi.py` and `RPi-script/data_crawler.sh` to `/usr/local/bin/dcaiti`. Make it executable with `chmod +x /usr/local/bin/dcaiti/aqi.py`
 
 ### SSH authentication
 To let the client connect autonomous to the master for gathering porposes, we need a key-pair for this. Generate one for the standard user (`pi`) with `ssh-keygen -t rsa -b 4096` and add the public key to the master system for the same user.
