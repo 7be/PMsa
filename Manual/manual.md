@@ -103,3 +103,25 @@ systemctl start sshd
 systemctl enable sshd
 ```
 
+## Client
+With the start of the service at the end, the clients should push there data to the master system. This will only happen, if they got a synchronization with NTP and are connected to the correct network (checked with `nslookup master.dcaiti`).
+
+### W-Lan
+Edit `/etc/wpa_supplicant.conf` to contain following network config:
+```
+country=DE
+
+network={
+        ssid="DCAITI_Feldversuch"
+        psk="dcaiti_wlan_passwort"
+        key_mgmt=WPA-PSK
+        priority=1
+}
+```
+### Gather scripts
+Copy `RPi-script/aqi.py` to `/usr/local/bin/dcaiti`. Make it executable with `chmod +x /usr/local/bin/dcaiti/aqi.py`
+
+### systemd service
+Copy `service_files/dcaiti_pm.service` to `/etc/systemd/system`. Enable and start it.
+
+
