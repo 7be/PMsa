@@ -29,6 +29,77 @@ Connect to the Network 'DCAITI_Feldversuch' with the password 'dcaiti_wlan_passw
 
 # Software Installation
 ## Master
-Generate a rsa key-pair and push the public key via `ssh-copy-id` to your designated master system. The private key will be used by the measurement clients. 
-Run the `install_master.sh` script via `ssh pi@IP_OF_MASTER_SYSTEM 'sudo bash -s' < install_master.sh`. 
+
+### W-Lan AP
+Collection of data and synchronization of time will be achieved via W-Lan. Connect to your device via cable and add following lines to `/etc/dhcpcd.conf`:
+```
+interface wlan0
+static ip_address=10.0.0.1/16 # 10.0.0.0 - 10.0.255.255
+```
+#### hostapd
+Restart the dhcp client daemon via `sudo systemctl restart dhcpcd`. Install the necessary software packages for an Access Point:
+`sudo apt install dnsmasq hostapd`. Backup the hostapd config file via `cp /etc/hostapd/hostapd.conf /etc/hostapd/hostapd.conf.old` and replace it by the one in this Repo (`service_files/hostapd.conf`). Keep in mind to change the password and make it only readable by root `chmod 600 /etc/hostapd/hostapd.conf`. Edit `/etc/defaults/hostapd` to contain following lines:
+```
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+```
+RUN_DAEMON=yes
+Start and enable the service:
+```
+systemctl unmask hostapd
+systemctl restart hostapd
+systemctl start hostapd
+```
+#### dnsmasq
+This will distribute ip configuration and give name resolution to your network.
+Backup old `dnsmasq.conf` and copy the one from the repo to  `/etc/dnsmasq.conf`
+```
+systemctl restart hostapd
+systemctl start hostapd
+```
+Add `10.0.0.1	master.dcaiti` to `/etc/host`
+
+#### NTP / GPS
+Install the packages `gpsd` and `ntp`. Add following lines to your `/etc/ntp.conf`:
+```
+server 127.127.28.0 prefer # GPS via SHM 
+# GPS data via SHM driver
+# flag1: Skip the difference limit check if set, see: http://doc.ntp.org/4.2.8/drivers/driver28.html
+fudge 127.127.28.0 flag1 1 refid GPS
+
+# announce this instance to our measurement network 
+restrict 10.0.0.0 mask 255.255.0.0 nomodify notrap
+```
+
+Edit `/etc/defaults/gpsd` to contain following line:
+```
+DEVICES="/dev/ttyUSB0"
+```
+The gps daemon will probe the GPS module via the USB/UART-Bridge. Finally start and enable those services:
+```
+systemctl start ntp
+systemctl enable ntp
+systemctl start gpsd
+systemctl enable gspd
+```
+Disable the timesync daemon:
+```
+systemctl stop systemd-timesyncd
+systemctl disable systemd-timesyncd
+```
+
+You can check ntp and gps via `cgps` or `ntpq -pn`.
+
+#### SSH Server
+Measurement clients will push there data via ssh to the master system. Authentication will be achieved by publickey authentication. Edit `/etc/ssh/sshd_config` to contain following lines:
+```
+PubkeyAuthentication yes
+
+# Expect .ssh/authorized_keys2 to be disregarded by default in future.
+AuthorizedKeysFile	.ssh/authorized_keys .ssh/authorized_keys2
+```
+Start and enable sshd:
+```
+systemctl start sshd
+systemctl enable sshd
+```
 
