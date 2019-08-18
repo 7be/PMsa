@@ -3,7 +3,7 @@
 # "DATASHEET": http://cl.ly/ekot
 # https://gist.github.com/kadamski/92653913a53baf9dd1a8
 from __future__ import print_function
-import serial, struct, sys, time, json
+import serial, struct, sys, time
 
 DEBUG = 0
 CMD_MODE = 2
@@ -16,7 +16,7 @@ MODE_ACTIVE = 0
 MODE_QUERY = 1
 
 ser = serial.Serial()
-ser.port = "/dev/ttyUSB0"
+ser.port = "/dev/serial0"
 ser.baudrate = 9600
 
 ser.open()
@@ -45,7 +45,7 @@ def process_data(d):
     pm10 = r[1]/10.0
     checksum = sum(ord(v) for v in d[2:8])%256
     return [pm25, pm10]
-    #print("PM 2.5: {} μg/m^3  PM 10: {} μg/m^3 CRC={}".format(pm25, pm10, "OK" if (checksum==r[2] and r[3]==0xab) else "NOK"))
+    print("PM 2.5: {} μg/m^3  PM 10: {} μg/m^3 CRC={}".format(pm25, pm10, "OK" if (checksum==r[2] and r[3]==0xab) else "NOK"))
 
 def process_version(d):
     r = struct.unpack('<BBBHBB', d[3:])
@@ -96,31 +96,20 @@ def cmd_set_id(id):
     read_response()
 
 if __name__ == "__main__":
-    while True:
-        cmd_set_sleep(0)
-        cmd_set_mode(1);
+    exit=False
+    cmd_set_sleep(0)
+    cmd_set_mode(1);
+    while exit == False:
         for t in range(15):
             values = cmd_query_data();
+            #fh=open("outfile.txt","w")
             if values is not None:
-                print("PM2.5: ", values[0], ", PM10: ", values[1])
-                time.sleep(2)
+                print("PM2.5: ", values[0], ", PM10: ", values[1], time.asctime())
 
-        # open stored data
-        with open('/var/www/html/aqi.json') as json_data:
-            data = json.load(json_data)
-
+                time.sleep(1)
+  
         # check if length is more than 100 and delete first element
         if len(data) > 100:
             data.pop(0)
 
-        # append new values
-        data.append({'pm25': values[0], 'pm10': values[1], 'time': time.strftime("%d.%m.%Y %H:%M:%S")})
 
-        # save it
-        with open('/var/www/html/aqi.json', 'w') as outfile:
-            json.dump(data, outfile)
-
-        print("Going to sleep for 1 min...")
-        cmd_set_mode(0);
-        cmd_set_sleep()
-        time.sleep(60)
