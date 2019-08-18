@@ -1,0 +1,14 @@
+[Unit]
+Description=DCAITI Feldversuch 
+Requires=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/dcaiti/data_crawler.sh
+User=pi
+Group=pi
+Restart=always
+RestartSec=20
+
+[Install]
+WantedBy=multi-user.target
