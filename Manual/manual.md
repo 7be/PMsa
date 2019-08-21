@@ -91,6 +91,7 @@ We build wooden stands for the measurements, but this is highli individual and d
 Connect to the Network 'DCAITI_Feldversuch' with the password 'dcaiti_wlan_passwort'. You can now connect to the master system via sftp://pi@master.dcaiti and find the measurements with a timestamp and its MAC-Adress in the home directory. The files have the form '$MAC_YYYYMMDDHHSS.csv'.
 
 # Software Installation
+First of all, start with the configuration of the Raspberry Pi itself. Start `sudo raspi-config` and choose the `Interfacing Options`. There you have to 'disable shell and kernel messages on the serial connection' to allow communication with a PM-Sensor. Also enable `SSH` to make a connection to your clients available (debug etc.). Go back to the main menu and chose `Localisation Options`. Choose the locale which suits your location. This is important for W-Lan configuration, since the allowed frequencys and signal strengts differ from country to country. Save the choosen Options and restart your Pi. 
 ## Master
 
 ### W-Lan AP
