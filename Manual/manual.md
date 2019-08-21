@@ -6,10 +6,10 @@ To build up a network of particulate matter sensors we will first describe how t
 To build up the hardware necessary for our network we need to assemble the parts given in the bill of materials. Additionally some wires and a 10k resistor are needed.
 ## Master setup
 Our Master PI will be connected to the weather station and will gather the weather data and supply the WIFI. As the weather station supplies an analogue signal, we need an external controller for that, because the PI does not have an ADC.
-We use a Arduino nano because it is very compact and cheap. 
-In this picture one can see how the wind vane is internally connected. For each direction it connects one resistor to the two ports. if the direction is in between two resistors both are connected in parallel.
+We use an Arduino nano because it is very compact and cheap. 
+In this picture one can see how the wind vane is internally connected. For each direction it connects one resistor to the two ports. If the direction is in between two resistors both are connected in parallel.
 Due to the unique selection of resistor values a voltage divider can be build up to determine the direction from the voltage level. 
-So we connect the one end of the vane to 5V the other to our Arduino ADC and a 10k resistor, which is connected to GND.
+So we connect one end of the vane to 5V the other to our Arduino ADC and a 10k resistor, which is connected to GND.
 The voltage reading is then transformed in the Arduino to a direction.
 
 ![weatherstation](weatherstation.PNG)
@@ -19,7 +19,7 @@ We therefore use the Arduino as well for the vane data, although this would not 
 The vane closes a connect for every turn of the rotor. Therefore this can be used as an external interrupt source. 
 We configure the Pin as pull up and issue the interrupt on every falling edge (rising edge would be possible as well).
 From the interrupts and the turns we can then calculate the wind speed. 
-To average the wind speed we biuld a ring buffer and average it for 10 interrupts. 
+To average the wind speed we built a ring buffer and average it for 10 interrupts. 
 We do this because for higher wind speed the number of milliseconds between to interrupts is very low. Therefore we assume a higher error. This might need further investigation, but we neither had the time nor the resources. 
 This also is not too important as the wind speed fluctuates anyways.
 ```
@@ -44,7 +44,7 @@ The schematics and assembly views are made with fritzing https://fritzing.org/ho
 
  ![schematic](schematic.PNG)
  
-We see that we hooked up the Arduino with the PI over an I2C bus. They both work fine with this. The Pi is the master and pulls the data which lay on the Arduino. 
+The picture shows how we hooked up the Arduino with the PI over an I2C bus. They both work fine with this. The Pi is the master and pulls the data which lay on the Arduino. 
 The Arduino is powered from the PI so in the end the Powerbank only needs to be connected to the PI.
 When we connect everything on a breadboard to test it it looks like this.
 
